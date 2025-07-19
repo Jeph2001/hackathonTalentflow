@@ -2,7 +2,10 @@ import { useState } from "react";
 
 type TaskItem = {
   id: string;
-  content: string;
+  title: string;
+  category: string;
+  createdAt: Date;
+  createdBy: string;
 };
 
 type Column = {
@@ -24,17 +27,45 @@ function Todo() {
     todo: {
       name: "To Do",
       items: [
-        { id: "1", content: "Market research" },
-        { id: "2", content: "Write Projects" },
+        {
+          id: "1",
+          title: "Market research",
+          category: "Research",
+          createdAt: new Date(),
+          createdBy: "User A",
+        },
+        {
+          id: "2",
+          title: "Write Projects",
+          category: "Writing",
+          createdAt: new Date(),
+          createdBy: "User B",
+        },
       ],
     },
     doing: {
       name: "Doing",
-      items: [{ id: "3", content: "Design UI mockups" }],
+      items: [
+        {
+          id: "3",
+          title: "Write Projects",
+          category: "Writing",
+          createdAt: new Date(),
+          createdBy: "User B",
+        },
+      ],
     },
     done: {
       name: "Done",
-      items: [{ id: "4", content: "Set up repository" }],
+      items: [
+        {
+          id: "4",
+          title: "Write Projects",
+          category: "Writing",
+          createdAt: new Date(),
+          createdBy: "User B",
+        },
+      ],
     },
   });
 
@@ -49,7 +80,10 @@ function Todo() {
 
     updatedColumns[activeColumns].items.push({
       id: Date.now().toString(),
-      content: newTask,
+      title: newTask,
+      category: "General",
+      createdAt: new Date(),
+      createdBy: "Current User",
     });
 
     setColumns(updatedColumns);
@@ -176,7 +210,17 @@ function Todo() {
                       draggable
                       onDragStart={() => handleDragStart(columnId, item)}
                     >
-                      <span className="mr-2">{item.content}</span>
+                      <div className="flex-col m-2">
+                        <span className="">{item.title}</span>
+                        <div className="mt-2">
+                          <span className="text-sm text-gray-500 p-1 mr-2 border-black rounded-lg border">
+                            {item.category}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            Created At: {item.createdAt.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
                       <button
                         onClick={() => removeTask(columnId, item.id)}
                         className="text-zinc-400 hover:text-red-400 transition-colors duration-200 w-6 h-6 flex items-center justify-center rounded-full hover:bg-zinc-600"
