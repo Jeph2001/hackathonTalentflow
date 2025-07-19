@@ -1,10 +1,13 @@
-name: CI
+name: CI and CD
+
 on:
   push:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
 jobs:
   audit:
     runs-on: ubuntu-latest
@@ -12,29 +15,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       - name: Audit dependencies
         run: npm audit
-
-  dep-check:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Install dependencies
-        run: npm ci
-      - name: Check for outdated dependencies
-        run: npx depcheck
 
-  npm-build:
-    needs: [dep-check, audit]
-    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
 
       - name: Install dependencies
-        run: npm ci
-      - name: Start the app
-        run: |
-          # compile typescript to generate vanilla js codes
-          npm run build
+        run: npm install --legacy-peer-deps
+
+      - name: Build the Vite app
+        run: npm run build

@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "../supabase/server";
 import { cookies } from "next/headers";
 import { CacheManager, CacheKeys, CacheTTL } from "../cache/redis-client";
 

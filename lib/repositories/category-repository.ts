@@ -87,7 +87,7 @@ class CategoryRepository extends BaseRepository<Category> {
 
     // Get usage counts for each category
     const categoryUsage = await Promise.all(
-      (categories || []).map(async (category: { id: any }) => {
+      (categories || []).map(async (category: Category) => {
         const [todosCount, notesCount, eventsCount] = await Promise.all([
           supabase
             .from("todos")
@@ -107,7 +107,7 @@ class CategoryRepository extends BaseRepository<Category> {
         ]);
 
         return {
-          category,
+          category: category,
           usage: {
             todos: todosCount.count || 0,
             notes: notesCount.count || 0,
