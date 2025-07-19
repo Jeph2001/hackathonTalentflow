@@ -1,0 +1,12 @@
+{
+  "name": "hackathontalentflow",
+  "version": "1.0.0",
+  "description": "Hackathon project by Team TalentFlow — building a solution to boost the productivity of Rwandan talents through smart, connected tools.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
